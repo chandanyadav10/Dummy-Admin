@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Users page must be a client component because:
+ * - It uses Zustand state.
+ * - It has search and pagination (useState/useEffect).
+ */
+
 import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Box,
@@ -25,6 +31,7 @@ function UsersTable() {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
 
+  // API-side pagination using skip = page * limit
   const skip = useMemo(() => page * ROWS_PER_PAGE, [page]);
 
   useEffect(() => {
@@ -67,7 +74,8 @@ function UsersTable() {
 
       {!loading && (
         <>
-          <Table size="small">
+        <Box sx={{ width: "100%", overflowX: "auto" }}>
+          <Table sx={{ minWidth: 650 }} size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -93,7 +101,7 @@ function UsersTable() {
               ))}
             </TableBody>
           </Table>
-
+</Box>
           <TablePagination
             component="div"
             count={total}
@@ -102,6 +110,7 @@ function UsersTable() {
             rowsPerPage={ROWS_PER_PAGE}
             rowsPerPageOptions={[ROWS_PER_PAGE]}
           />
+          
         </>
       )}
     </Paper>

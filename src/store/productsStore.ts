@@ -1,3 +1,17 @@
+
+/**
+ * Zustand store for product management.
+ *
+ * Why Zustand?
+ * - Extremely lightweight compared to Redux Toolkit.
+ * - Store logic + async API calls live together in one place.
+ * - No actions, reducers, reducers — easy to maintain under time constraints.
+ *
+ * Caching:
+ * - Each search + filter + page combo is cached using a simple key.
+ * - Prevents re-fetching when the user repeats the same action.
+ */
+
 import { create } from "zustand";
 import { apiFetch } from "@/lib/apiClient";
 

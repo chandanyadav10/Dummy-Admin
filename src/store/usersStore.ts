@@ -1,6 +1,21 @@
 import { create } from "zustand";
 import { apiFetch } from "@/lib/apiClient";
 
+/**
+ * Simple client-side caching strategy:
+ *
+ * - The key `${q}-${skip}-${limit}` uniquely identifies each API call
+ *   (search query + pagination).
+ *
+ * - If the same combination is requested again, we serve data from cache
+ *   instead of calling DummyJSON again.
+ *
+ * Benefits:
+ * ✔️ Avoids unnecessary API calls
+ * ✔️ Makes "back" navigation instant
+ * ✔️ Reduces flickering/loading states
+ */
+
 export type User = {
   id: number;
   firstName: string;
@@ -39,6 +54,8 @@ export const useUsersStore = create<UsersState>((set, get) => ({
 
     set({ loading: true, error: null });
     try {
+      // DummyJSON supports API-side pagination:
+    // This prevents loading large data sets and improves performance.
       const url = q
         ? `/users/search?q=${encodeURIComponent(q)}&limit=${limit}&skip=${skip}`
         : `/users?limit=${limit}&skip=${skip}`;
